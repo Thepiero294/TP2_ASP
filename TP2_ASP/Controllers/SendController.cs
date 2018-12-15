@@ -67,7 +67,7 @@ namespace TP2_ASP.Controllers
         public IBackgroundTaskQueue Queue { get; }
 
         [HttpPost]
-        public IActionResult OnPostAddTask(string nom, string adresse, string numeroTelecopie)
+        public IActionResult OnPostAddTask(string nom, string adresse, string NuméroTelecopieur)
         {
             BlobClass blob = new BlobClass();
             string fileName = string.Empty;
@@ -85,7 +85,7 @@ namespace TP2_ASP.Controllers
                 }
             }
             string idUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            int id = SendViewModel.insert(context, nom, adresse, numeroTelecopie, fileName, "En cours", idUser);
+            int id = SendViewModel.insert(context, nom, adresse, NuméroTelecopieur, fileName, "En cours", idUser);
             string view;
             CustomUser utilisateur;
             using (ApplicationDbContext database = new ApplicationDbContext(context))
@@ -136,7 +136,9 @@ namespace TP2_ASP.Controllers
                         utilisateur.Solde += 1;
                         database.SaveChanges();
                     }
+                    reussite = true;
                 }
+                Task.Delay(tempsAttente());
             }
         }
 
@@ -149,6 +151,13 @@ namespace TP2_ASP.Controllers
                 return true;
             else
                 return false;
+        }
+
+        private int tempsAttente()
+        {
+            Random r = new Random();
+            int resultInt;
+            return resultInt = r.Next(30000);
         }
     }
 }

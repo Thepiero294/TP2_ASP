@@ -10,6 +10,7 @@ namespace TP2_ASP.Models.SendViewModels
 {
     public class SendViewModel
     {
+        [Key]
         public int Id { get; set; }
         public string Nom { get; set; }
         public string Adresse { get; set; }
@@ -31,7 +32,6 @@ namespace TP2_ASP.Models.SendViewModels
             Fichier = fichier;
             Status = status;
             Sender = sender;
-            Id = Id;
         }
 
 
@@ -41,10 +41,11 @@ namespace TP2_ASP.Models.SendViewModels
             using (ApplicationDbContext context = new ApplicationDbContext(option))
             {
                 SendViewModel telecopie = new SendViewModel(nom,  adresse, numeroTelecopieur, fichier, status, sender);
-                id = telecopie.Id;
+                context.SendViewModels.Add(telecopie);
                 context.SaveChanges();
+                return telecopie.Id; ;
             }
-            return id;
+            
         }
 
         public static IQueryable<SendViewModel> getTelecopies(DbContextOptions<ApplicationDbContext> option, string sender)
