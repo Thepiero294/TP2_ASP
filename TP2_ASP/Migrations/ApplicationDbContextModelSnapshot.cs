@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TP2_ASP.Data;
 
-namespace TP2_ASP.Data.Migrations
+namespace TP2_ASP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181214033525_updateUser")]
-    partial class updateUser
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,9 +204,14 @@ namespace TP2_ASP.Data.Migrations
                     b.Property<string>("NuméroTelecopieur")
                         .IsRequired();
 
+                    b.Property<string>("Sender")
+                        .IsRequired();
+
+                    b.Property<string>("Status");
+
                     b.HasKey("Id");
 
-                    b.ToTable("SendViewModel");
+                    b.ToTable("SendViewModels");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

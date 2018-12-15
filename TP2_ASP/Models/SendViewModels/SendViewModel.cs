@@ -48,15 +48,15 @@ namespace TP2_ASP.Models.SendViewModels
             
         }
 
-        public static IQueryable<SendViewModel> getTelecopies(DbContextOptions<ApplicationDbContext> option, string sender)
+        public static IEnumerable<SendViewModel> getTelecopies(DbContextOptions<ApplicationDbContext> option, string sender)
         {
             IQueryable<SendViewModel> listTelecopies;
 
             using (ApplicationDbContext context = new ApplicationDbContext(option))
             {
                 listTelecopies = (from t in context.SendViewModels where t.Sender == sender select t);
+                return listTelecopies.ToArray<SendViewModel>();
             }
-            return listTelecopies;
         }
 
         public static void SetStatus(DbContextOptions<ApplicationDbContext> option,int id, string status)

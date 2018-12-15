@@ -7,7 +7,7 @@
 <h2>Index</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="OnPostAddTask">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -23,6 +23,12 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Fichier)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sender)
             </th>
             <th></th>
         </tr>
@@ -43,10 +49,18 @@
                 @Html.DisplayFor(modelItem => item.Fichier)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @Html.DisplayFor(modelItem => item.Status)
             </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sender)
+            </td>
+            @if (item.Status != "Réussis")
+            {
+                <td>
+                    <a asp-action="retry" asp-route-id="@item.Id">Réessayer</a>
+                </td>
+            }
+
         </tr>
 }
     </tbody>

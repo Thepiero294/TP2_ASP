@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TP2_ASP.Data;
 
-namespace TP2_ASP.Data.Migrations
+namespace TP2_ASP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181214211904_modifySender")]
-    partial class modifySender
+    [Migration("20181215033109_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -208,6 +208,8 @@ namespace TP2_ASP.Data.Migrations
 
                     b.Property<string>("Sender")
                         .IsRequired();
+
+                    b.Property<string>("Status");
 
                     b.HasKey("Id");
 

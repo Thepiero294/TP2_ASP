@@ -46,10 +46,6 @@ namespace TP2_ASP
 
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
 
-            // services.AddHostedService<QueuedHostedService>();
-            // Va falloir checker sa TODO
-            // services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -60,10 +56,12 @@ namespace TP2_ASP
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+                app.UseStatusCodePages();
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/error/Error");
+                app.UseStatusCodePages();
                 app.UseHsts();
             }
 

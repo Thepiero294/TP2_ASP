@@ -24,37 +24,19 @@ namespace TP2_ASP.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-
-            return View("Index");
+            var model = new List<SendViewModel>();
+            foreach (SendViewModel item in SendViewModel.getTelecopies(context, User.FindFirstValue(ClaimTypes.NameIdentifier)))
+            {
+                model.Add(item);
+            }
+            
+            return View("Index", model);
         }
 
         // GET send/create
         public IActionResult Create()
         {
             return View("Create");
-        }
-
-        // POST image/create
-        [HttpPost]
-        public IActionResult Create(string name)
-        {
-            ApiBlobController blob = new ApiBlobController();
-
-            //if (HttpContext.Request.Form.Files != null)
-            //{
-            //    var fileName = string.Empty;
-
-            //    var files = HttpContext.Request.Form.Files;
-
-            //    foreach (var file in files)
-            //    {
-            //        if (file.Length > 0)
-            //        {
-            //            blob.Post(file);
-            //        }
-            //    }
-            //}
-            return View("Index", blob.Get());
         }
 
         public SendController(IBackgroundTaskQueue queue, DbContextOptions<ApplicationDbContext> option, ILogger<SendController> logger)
@@ -99,13 +81,18 @@ namespace TP2_ASP.Controllers
                     {
                         await EnvoieAsync(id);
                     });
-                    view = "send";
+
+                    var model = new List<SendViewModel>();
+                    foreach (SendViewModel item in SendViewModel.getTelecopies(context, User.FindFirstValue(ClaimTypes.NameIdentifier)))
+                    {
+                        model.Add(item);
+                    }
+
+                    return View("Index", model);
                 }
                 else
-                    view = "send/soldeInsufisant";
+                    return View("soldeInsufisant");
             }
-
-            return View(view);
         }
 
         private async Task EnvoieAsync(int id)
@@ -139,6 +126,36 @@ namespace TP2_ASP.Controllers
                     reussite = true;
                 }
                 Task.Delay(tempsAttente());
+            }
+        }
+
+        [Route("/soldeInsufisant")]
+        // GET send/create
+        public IActionResult soldeInsufisant()
+        {
+            return View("soldeInsufisant");
+        }
+
+        public IActionResult retry(int id)
+        {
+            string idUser = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            CustomUser utilisateur;
+            using (ApplicationDbContext database = new ApplicationDbContext(context))
+            {
+                utilisateur = database.Users.First(u => u.Id == idUser);
+                if (utilisateur.Solde != 0)
+                {
+                    utilisateur.Solde -= 1;
+                    database.SaveChanges();
+                    Queue.QueueBackgroundWorkItem(async token =>
+                    {
+                        await EnvoieAsync(id);
+                    });
+
+                    return Redirect("/send");
+                }
+                else
+                    return Redirect("/soldeInsufisant");
             }
         }
 
