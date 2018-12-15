@@ -1,30 +1,33 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using System.Threading.Tasks;
 
 namespace TP2_ASP.Controllers
 {
-    public class BlobClass
+    [Route("api/[controller]")]
+    [ApiController]
+    [AllowAnonymous]
+    public class BlobController : ControllerBase
     {
         // GET: api/Blob
-        public List<string> Get()
+        [HttpGet]
+        [Authorize]
+        public IEnumerable<IListBlobItem> Get()
         {
             CloudBlobContainer container = GetCloudBlobContainer();
-            List<string> blobs = new List<string>();
+            List<IListBlobItem> blobs = new List<IListBlobItem>();
             BlobResultSegment resultSegment = container.ListBlobsSegmentedAsync(null).Result;
             foreach (IListBlobItem item in resultSegment.Results)
             {
-                CloudBlockBlob blob = (CloudBlockBlob)item;
-                blobs.Add(blob.Name);
+                blobs.Add(item);
             }
 
             return blobs;
@@ -32,7 +35,9 @@ namespace TP2_ASP.Controllers
 
 
         // GET: api/Blob/fileName
-        public CloudBlockBlob Get(string name)
+        [HttpGet("{name}", Name = "Get")]
+        [Authorize]
+        public FileStreamResult Get(string name)
         {
             CloudBlobContainer container = GetCloudBlobContainer();
 
@@ -47,7 +52,12 @@ namespace TP2_ASP.Controllers
                     CloudBlockBlob blob = (CloudBlockBlob)blobItem;
                     if (blob.Name == name)
                     {
-                        return blob;
+                        Stream stream = new MemoryStream();
+
+                        blob.DownloadToStreamAsync(stream);
+                        stream.Position = 0;
+
+                        return new FileStreamResult(stream, blob.Properties.ContentType);
                     }
                 }
             }
@@ -55,6 +65,8 @@ namespace TP2_ASP.Controllers
         }
 
         // POST: api/Blob
+        [HttpPost]
+        [Authorize]
         async public Task Post([FromBody] IFormFile file)
         {
             CloudBlobContainer container = GetCloudBlobContainer();
@@ -62,15 +74,39 @@ namespace TP2_ASP.Controllers
             // va chercher la reference vers le blob
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(file.FileName);
 
+            // Creer ou ecrase le blob
             using (var fileStream = file.OpenReadStream())
             {
                 await blockBlob.UploadFromStreamAsync(fileStream);
             }
-            // Creer ou ecrase le blob
 
         }
 
+        //[HttpPost]
+        //public async Task Post([FromForm]IFormFile asset)
+        //{
+        //    CloudStorageAccount storageAccount = null;
+        //    var builder = new ConfigurationBuilder()
+        //        .SetBasePath(Directory.GetCurrentDirectory())
+        //        .AddJsonFile("appsettings.json");
+        //    IConfigurationRoot Configuration = builder.Build();
+        //    if (CloudStorageAccount.TryParse(Configuration["ConnectionStrings:AzureStorageConnectionString-1"], out storageAccount))
+        //    {
+        //        var client = storageAccount.CreateCloudBlobClient();
+        //        var container = client.GetContainerReference("blob-image-exer7");
+        //        await container.CreateIfNotExistsAsync();
+
+        //        var blob = await container.GetBlobReferenceFromServerAsync(asset.FileName);
+        //        await blob.UploadFromStreamAsync(asset.OpenReadStream());
+
+        //    }
+
+        //}
+
+
         // DELETE: api/ApiWithActions/5
+        [HttpDelete("{id}")]
+        [Authorize]
         public void Delete(string name)
         {
             CloudBlobContainer container = GetCloudBlobContainer();

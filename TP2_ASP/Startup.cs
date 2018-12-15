@@ -41,6 +41,7 @@ namespace TP2_ASP
             services.AddDefaultIdentity<CustomUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            // Authentification avec Microsoft
             services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
             {
                 microsoftOptions.ClientId = Configuration["Authentication:Microsoft:ApplicationId"];
@@ -61,13 +62,13 @@ namespace TP2_ASP
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-                app.UseStatusCodePages();
+               // app.UseDatabaseErrorPage();
+                //app.UseStatusCodePages();
             }
             else
             {
-                app.UseExceptionHandler("/error/Error");
-                app.UseStatusCodePages();
+                //app.UseExceptionHandler("/error/Error");
+                //app.UseStatusCodePages();
                 app.UseHsts();
             }
 

@@ -48,15 +48,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sender)
-            </td>
             @if (item.Status != "Réussis")
             {
                 <td>
                     <a asp-action="retry" asp-route-id="@item.Id">Réessayer</a>
                 </td>
             }
+            <td>
+                <a href="/api/Blob/@item.Fichier">Télécharger</a>
+            </td>
 
         </tr>
 }

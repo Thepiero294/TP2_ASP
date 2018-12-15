@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using TP2_ASP.Data;
 using TP2_ASP.Models.SendViewModels;
 using Microsoft.AspNetCore.Hosting;
+using System.Net;
 
 namespace TP2_ASP.Controllers
 {
@@ -29,7 +30,7 @@ namespace TP2_ASP.Controllers
             {
                 model.Add(item);
             }
-            
+
             return View("Index", model);
         }
 
@@ -51,8 +52,9 @@ namespace TP2_ASP.Controllers
         [HttpPost]
         public IActionResult OnPostAddTask(string nom, string adresse, string NuméroTelecopieur)
         {
-            BlobClass blob = new BlobClass();
-            string fileName = string.Empty;
+            BlobController blob = new BlobController();
+            string fileName = "";
+
             if (HttpContext.Request.Form.Files != null)
             {
                 var files = HttpContext.Request.Form.Files;
