@@ -55,19 +55,29 @@ namespace TP2_ASP.Controllers
         }
 
         // POST: api/Blob
+
+        // POST: api/Blob
         async public Task Post([FromBody] IFormFile file)
         {
-            CloudBlobContainer container = GetCloudBlobContainer();
+            // CloudBlobContainer container = GetCloudBlobContainer();
+
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json");
+            IConfigurationRoot Configuration = builder.Build();
+            CloudStorageAccount storageAccount =
+                CloudStorageAccount.Parse(Configuration["ConnectionStrings:AzureStorageConnectionString-1"]);
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            CloudBlobContainer container = blobClient.GetContainerReference("blob-image-exer7");
 
             // va chercher la reference vers le blob
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(file.FileName);
 
+            // Creer ou ecrase le blob
             using (var fileStream = file.OpenReadStream())
             {
                 await blockBlob.UploadFromStreamAsync(fileStream);
             }
-            // Creer ou ecrase le blob
-
         }
 
         // DELETE: api/ApiWithActions/5

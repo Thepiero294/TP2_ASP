@@ -31,34 +31,36 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Adresse)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NuméroTelecopieur)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fichier)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            @if (item.Status != "Réussis")
-            {
+        @foreach (var item in Model)
+        {
+            <tr>
                 <td>
-                    <a asp-action="retry" asp-route-id="@item.Id">Réessayer</a>
+                    @Html.DisplayFor(modelItem => item.Nom)
                 </td>
-            }
-            <td>
-                <a href="/api/Blob/@item.Fichier">Télécharger</a>
-            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Adresse)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NuméroTelecopieur)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fichier)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    <a href="/api/Blob/@item.Fichier">Télécharger</a>
+                </td>
+                @if (item.Status != "Réussis")
+                {
+                    <td>
+                        <a asp-action="retry" asp-route-id="@item.Id">Réessayer</a>
+                    </td>
+                }
 
-        </tr>
-}
+
+            </tr>
+        }
     </tbody>
 </table>

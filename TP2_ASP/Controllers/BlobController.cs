@@ -34,52 +34,37 @@ namespace TP2_ASP.Controllers
         }
 
 
+
         // GET: api/Blob/fileName
         [HttpGet("{name}", Name = "Get")]
-        [Authorize]
-        public FileStreamResult Get(string name)
+        [AllowAnonymous]
+        async public Task<FileStreamResult> Get(string name)
         {
-            CloudBlobContainer container = GetCloudBlobContainer();
+            BlobClass blob = new BlobClass();
 
-            // va chercher la reference vers le blob
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference(name);
+            MemoryStream stream = new MemoryStream();
+            CloudBlockBlob cloudBlob = blob.Get(name);
+            await cloudBlob.DownloadToStreamAsync(stream);
+            stream.Position = 0;
+            // fill stream from blob
+            return new FileStreamResult(stream, cloudBlob.Properties.ContentType);
 
-            BlobResultSegment resultSegment = container.ListBlobsSegmentedAsync(null).Result;
-            foreach (IListBlobItem blobItem in resultSegment.Results)
-            {
-                if (blobItem.GetType() == typeof(CloudBlockBlob))
-                {
-                    CloudBlockBlob blob = (CloudBlockBlob)blobItem;
-                    if (blob.Name == name)
-                    {
-                        Stream stream = new MemoryStream();
-
-                        blob.DownloadToStreamAsync(stream);
-                        stream.Position = 0;
-
-                        return new FileStreamResult(stream, blob.Properties.ContentType);
-                    }
-                }
-            }
-            return null;
         }
 
         // POST: api/Blob
         [HttpPost]
         [Authorize]
-        async public Task Post([FromBody] IFormFile file)
+        public async Task Post([FromBody] IFormFile file)
         {
-            CloudBlobContainer container = GetCloudBlobContainer();
+            BlobClass blob = new BlobClass();
 
-            // va chercher la reference vers le blob
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference(file.FileName);
-
-            // Creer ou ecrase le blob
-            using (var fileStream = file.OpenReadStream())
+            try
             {
-                await blockBlob.UploadFromStreamAsync(fileStream);
+                await blob.Post(file);
             }
-
+            catch
+            {
+            }
         }
 
         //[HttpPost]
