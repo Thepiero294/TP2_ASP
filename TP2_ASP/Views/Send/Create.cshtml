@@ -4,9 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Create</h2>
-
-<h4>SendViewModel</h4>
+<h2>Envoie</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -27,11 +25,6 @@
                 <input asp-for="NuméroTelecopieur" class="form-control" />
                 <span asp-validation-for="NuméroTelecopieur" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label asp-for="Fichier" class="control-label"></label>
-                <input type="file" asp-for="Fichier" multiple />
-                <span asp-validation-for="Fichier" class="text-danger"></span>
-            </div>*@
             <div class="form-group">
                 <div class="col-md-10">
                     <p>Ajouter une image:</p>
@@ -46,7 +39,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Retour à la liste</a>
 </div>
 
 @section Scripts {

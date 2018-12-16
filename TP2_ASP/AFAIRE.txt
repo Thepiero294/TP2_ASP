@@ -1,4 +1,1 @@
-﻿BD Azure 
-Deploiement 
-Rendre ca minimum beau 
-Offire de faire un payment ou de se connecter a lenvoie si pas connecter 
+﻿Deploiement 

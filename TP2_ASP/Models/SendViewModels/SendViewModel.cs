@@ -12,13 +12,23 @@ namespace TP2_ASP.Models.SendViewModels
     {
         [Key]
         public int Id { get; set; }
+
         public string Nom { get; set; }
+
+        [RegularExpression("[0-9]{1,3}(([,. ]?){1}[-a-zA-Zàâäéèêëïîôöùûüç']+)*", 
+            ErrorMessage = "Veuillez entrer une adresse valide")]
         public string Adresse { get; set; }
+
         [Required]
+        [RegularExpression("^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$", 
+            ErrorMessage = "Veuillez entrer un numéro valide")]
         public string NuméroTelecopieur { get; set; }
+
         [Required]
         public string Fichier { get; set; }
+
         public string Status { get; set; }
+
         [Required]
         public virtual string Sender { get; set; }
 
