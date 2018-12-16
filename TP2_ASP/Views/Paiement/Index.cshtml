@@ -6,50 +6,61 @@
 
 <h2>Paiement</h2>
 
-<form action="/paiement/paiementReussi" method="POST">
-    @Html.AntiForgeryToken()
-    <article>
-        <label>1 télécopie : 2.99$</label>
-    </article>
-    <script src="//checkout.stripe.com/v2/checkout.js"
-            class="stripe-button"
-            data-key="@Stripe.Value.PublishableKey"
-            data-locale="auto"
-            data-description="Sample Charge"
-            data-amount="299">
-    </script>
-    <input style="visibility:hidden" name="nombreTelecopies" value="1" />
-    <input style="visibility:hidden" name="montant" value="299" />
-</form>
+<div class="row">
+    <div class="col-md-4">
+        <h1>1</h1>
+        <form action="/paiement/paiementReussi" method="POST">
+            @Html.AntiForgeryToken()
+            <article>
+                <label>1 télécopie : 2.99$</label>
+            </article>
+            <script src="//checkout.stripe.com/v2/checkout.js"
+                    class="stripe-button"
+                    data-key="@Stripe.Value.PublishableKey"
+                    data-locale="auto"
+                    data-description="Sample Charge"
+                    data-amount="299">
+            </script>
+            <input style="visibility:hidden" name="nombreTelecopies" value="1" />
+            <input style="visibility:hidden" name="montant" value="299" />
+        </form>
+    </div>
 
-<form action="/paiement/paiementReussi" method="POST">
-    @Html.AntiForgeryToken()
-    <article>
-        <label>10 télécopies : 7.99$</label>
-    </article>
-    <script src="//checkout.stripe.com/v2/checkout.js"
-            class="stripe-button"
-            data-key="@Stripe.Value.PublishableKey"
-            data-locale="auto"
-            data-description="Sample Charge"
-            data-amount="799">
-    </script>
-    <input style="visibility:hidden" name="nombreTelecopies" value="10" />
-    <input style="visibility:hidden" name="montant" value="799" />
-</form>
+    <div class="col-md-4">
+        <h1>10</h1>
+        <form action="/paiement/paiementReussi" method="POST">
+            @Html.AntiForgeryToken()
+            <article>
+                <label>10 télécopies : 7.99$</label>
+            </article>
+            <script src="//checkout.stripe.com/v2/checkout.js"
+                    class="stripe-button"
+                    data-key="@Stripe.Value.PublishableKey"
+                    data-locale="auto"
+                    data-description="Sample Charge"
+                    data-amount="799">
+            </script>
+            <input style="visibility:hidden" name="nombreTelecopies" value="10" />
+            <input style="visibility:hidden" name="montant" value="799" />
+        </form>
+    </div>
 
-<form action="/paiement/paiementReussi" method="POST">
-    @Html.AntiForgeryToken()
-    <article>
-        <label>100 télécopies : 49.99$</label>
-    </article>
-    <script src="//checkout.stripe.com/v2/checkout.js"
-            class="stripe-button"
-            data-key="@Stripe.Value.PublishableKey"
-            data-locale="auto"
-            data-description="Sample Charge"
-            data-amount="4999">
-    </script>
-    <input style="visibility:hidden" name="nombreTelecopies" value="100" />
-    <input style="visibility:hidden" name="montant" value="4999" />
-</form>
+    <div class="col-md-4">
+        <h1>100</h1>
+        <form action="/paiement/paiementReussi" method="POST">
+            @Html.AntiForgeryToken()
+            <article>
+                <label>100 télécopies : 49.99$</label>
+            </article>
+            <script src="//checkout.stripe.com/v2/checkout.js"
+                    class="stripe-button"
+                    data-key="@Stripe.Value.PublishableKey"
+                    data-locale="auto"
+                    data-description="Sample Charge"
+                    data-amount="4999">
+            </script>
+            <input style="visibility:hidden" name="nombreTelecopies" value="100" />
+            <input style="visibility:hidden" name="montant" value="4999" />
+        </form>
+    </div>
+</div>
